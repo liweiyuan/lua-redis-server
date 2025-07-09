@@ -1,4 +1,5 @@
 local resp_protocol = {}
+local logger = require("logger")
 
 -- RESP 协议编码函数
 function resp_protocol.encode_string(str)
@@ -56,11 +57,11 @@ function resp_protocol.parse_command(client)
             -- 消耗掉 CRLF
             local crlf, err = client:receive(2)
             if err then
-                print("ERROR: Socket error while consuming CRLF: " .. tostring(err))
+                logger.log("ERROR", "Socket error while consuming CRLF: " .. tostring(err))
                 return nil, err
             end
             if crlf ~= "\r\n" then
-                print("ERROR: Expected CRLF but received: '" .. (crlf or "nil") .. "' (length: " .. (crlf and #crlf or "nil") .. ")")
+                logger.log("ERROR", "Expected CRLF but received: '" .. (crlf or "nil") .. "' (length: " .. (crlf and #crlf or "nil") .. ")")
                 return nil, "ERR protocol error: missing CRLF after bulk data"
             end
 

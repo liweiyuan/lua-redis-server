@@ -15,12 +15,16 @@ Currently, it supports the following Redis commands:
 
 - Lua 5.1+ (developed with 5.4)
 - LuaRocks
-- `luasocket` library
 
-Install `luasocket` via LuaRocks:
+## Installation
+
+The only external dependency is `luasocket`. You can install it locally using LuaRocks:
+
 ```sh
-luarocks install luasocket
+luarocks install --local luasocket
 ```
+
+All other dependencies are included in this project.
 
 ## Usage
 

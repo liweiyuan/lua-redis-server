@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Configuration
 LOG_FILE="server.log"
@@ -6,7 +6,7 @@ PID_FILE="process.pid"
 LUA_SERVER_CMD="lua main.lua" # The actual command to run the server
 
 # Set LUA_PATH and LUA_CPATH for local LuaRocks installations
-export LUA_PATH="./?.lua;$HOME/.luarocks/share/lua/5.4/?.lua;$HOME/.luarocks/share/lua/5.4/?/init.lua;"$LUA_PATH
+export LUA_PATH="./?.lua;./?/init.lua;$HOME/.luarocks/share/lua/5.4/?.lua;$HOME/.luarocks/share/lua/5.4/?/init.lua;"$LUA_PATH
 export LUA_CPATH="$HOME/.luarocks/lib/lua/5.4/?.so;"$LUA_CPATH
 
 # Function to check if the server is running
