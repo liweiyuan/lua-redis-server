@@ -4,6 +4,7 @@ local data_store = require("data_store")
 local logger = require("logger")
 
 -- 命令处理函数
+-- 处理 PING 命令
 local function handle_ping(client, args)
     if #args > 1 then
         logger.log("WARN", "PING: wrong number of arguments: " .. #args)
@@ -15,6 +16,7 @@ local function handle_ping(client, args)
     end
 end
 
+-- 处理 SET 命令
 local function handle_set(client, args)
     if #args < 3 then
         logger.log("WARN", "SET: wrong number of arguments: " .. #args)
@@ -27,6 +29,7 @@ local function handle_set(client, args)
     client:send(resp_protocol.encode_string("OK"))
 end
 
+-- 处理 GET 命令
 local function handle_get(client, args)
     if #args < 2 then
         logger.log("WARN", "GET: wrong number of arguments: " .. #args)

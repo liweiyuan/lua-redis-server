@@ -2,10 +2,12 @@ local resp_protocol = {}
 local logger = require("logger")
 
 -- RESP 协议编码函数
+-- 编码简单字符串回复
 function resp_protocol.encode_string(str)
     return "+" .. str .. "\r\n"
 end
 
+-- 编码批量字符串回复
 function resp_protocol.encode_bulk_string(str)
     if str == nil then
         return "$-1\r\n" -- Null Bulk String
@@ -13,10 +15,12 @@ function resp_protocol.encode_bulk_string(str)
     return "$" .. #str .. "\r\n" .. str .. "\r\n"
 end
 
+-- 编码错误回复
 function resp_protocol.encode_error(err_msg)
     return "-" .. err_msg .. "\r\n"
 end
 
+-- 编码数组回复
 function resp_protocol.encode_array(arr)
     if not arr then return "*-1\r\n" end -- Null Array
     local result = "*" .. #arr .. "\r\n"
@@ -50,10 +54,10 @@ function resp_protocol.parse_command(client)
 
             local bulk_len = tonumber(bulk_len_line:sub(2))
             if not bulk_len or bulk_len < 0 then return nil, "ERR invalid bulk string length" end
-            
+
             local bulk_data, err = client:receive(bulk_len)
             if not bulk_data or err then return nil, err end
-            
+
             -- 消耗掉 CRLF
             local crlf, err = client:receive(2)
             if err then
@@ -61,7 +65,9 @@ function resp_protocol.parse_command(client)
                 return nil, err
             end
             if crlf ~= "\r\n" then
-                logger.log("ERROR", "Expected CRLF but received: '" .. (crlf or "nil") .. "' (length: " .. (crlf and #crlf or "nil") .. ")")
+                logger.log("ERROR",
+                    "Expected CRLF but received: '" ..
+                    (crlf or "nil") .. "' (length: " .. (crlf and #crlf or "nil") .. ")")
                 return nil, "ERR protocol error: missing CRLF after bulk data"
             end
 
